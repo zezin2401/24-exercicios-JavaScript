@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Mouses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Controle de Mouses</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Situação</th>
+                <th>Quantidade</th>
+                <th>Percentual</th>
+            </tr>
+        </thead>
+        <tbody id="tabelaDados">
+            
+        </tbody>
+    </table>
+
+    <div id="botoes">
+        <button onclick="atualizarQuantidade('necessitaEsfera')">Necessita da esfera</button>
+        <button onclick="atualizarQuantidade('necessitaLimpeza')">Necessita de limpeza</button>
+        <button onclick="atualizarQuantidade('necessitaTroca')">Necessita troca do cabo ou conector</button>
+        <button onclick="atualizarQuantidade('quebrado')">Quebrado ou inutilizado</button>
+    </div>
+
+    <script>
+        const situacoes = {
+            'necessitaEsfera': { descricao: 'Necessita da esfera', quantidade: 0 },
+            'necessitaLimpeza': { descricao: 'Necessita de limpeza', quantidade: 0 },
+            'necessitaTroca': { descricao: 'Necessita troca do cabo ou conector', quantidade: 0 },
+            'quebrado': { descricao: 'Quebrado ou inutilizado', quantidade: 0 }
+        };
+
+        function atualizarQuantidade(tipo) {
+            if (situacoes[tipo]) {
+                situacoes[tipo].quantidade++;
+                atualizarTabela();
+            }
+        }
+
+        function atualizarTabela() {
+            const tabela = document.getElementById('tabelaDados');
+            tabela.innerHTML = '';
+
+            const total = Object.values(situacoes).reduce((sum, situacao) => sum + situacao.quantidade, 0);
+
+            for (const key in situacoes) {
+                const situacao = situacoes[key];
+                const percentual = total > 0 ? ((situacao.quantidade / total) * 100).toFixed(2) : 0;
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${situacao.descricao}</td>
+                        <td>${situacao.quantidade}</td>
+                        <td>${percentual}%</td>
+                    </tr>
+                `;
+            }
+        }
+
+        
+        atualizarTabela();
+    </script>
+</body>
+</html>

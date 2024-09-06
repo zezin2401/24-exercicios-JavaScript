@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lançamento de Dado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        button {
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="realizarLancamentos()">Lançar o Dado</button>
+    
+    <p id="resultadosLances"></p>
+    <ul id="contagemValores"></ul>
+
+    <script>
+        function lancarDado() {
+            return Math.floor(Math.random() * 6) + 1;
+        }
+
+        function realizarLancamentos() {
+            const numLancamentos = 100;
+            const resultados = [];
+            const contagem = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0};
+
+            for (let i = 0; i < numLancamentos; i++) {
+                const resultado = lancarDado();
+                resultados.push(resultado);
+                contagem[resultado]++;
+            }
+
+            document.getElementById('resultadosLances').textContent = resultados.join(', ');
+
+            const contagemLista = document.getElementById('contagemValores');
+            contagemLista.innerHTML = '';
+            for (let valor = 1; valor <= 6; valor++) {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Valor ${valor}: ${contagem[valor]} vezes`;
+                contagemLista.appendChild(listItem);
+            }
+        }
+    </script>
+</body>
+</html>

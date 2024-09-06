@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquete</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
+        h1 { color: #333; }
+        label { display: block; margin: 10px 0; }
+        button { margin-top: 20px; }
+        #resultado { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Qual sistema operacional você prefere?</h1>
+    <form id="enqueteForm">
+        <label><input type="radio" name="sistema" value="Windows Server"> Windows Server</label>
+        <label><input type="radio" name="sistema" value="Unix"> Unix</label>
+        <label><input type="radio" name="sistema" value="Linux"> Linux</label>
+        <label><input type="radio" name="sistema" value="Netware"> Netware</label>
+        <label><input type="radio" name="sistema" value="Mac OS"> Mac OS</label>
+        <label><input type="radio" name="sistema" value="Outros"> Outros</label>
+        <button type="button" onclick="votar()">Votar</button>
+        <button type="button" onclick="mostrarResultado()">Mostrar Resultado</button>
+        <button type="button" onclick="excluirTodosVotos()">Excluir Todos os Votos</button>
+    </form>
+    <div id="resultado"></div>
+    <script>
+        const initVotos = { "Windows Server": 0, "Unix": 0, "Linux": 0, "Netware": 0, "Mac OS": 0, "Outros": 0 };
+        if (!localStorage.getItem('contagemVotos')) localStorage.setItem('contagemVotos', JSON.stringify(initVotos));
+
+        function votar() {
+            const selecionado = [...document.querySelectorAll('input[name="sistema"]')]
+                .find(input => input.checked)?.value;
+            if (selecionado) {
+                const votos = JSON.parse(localStorage.getItem('contagemVotos'));
+                votos[selecionado]++;
+                localStorage.setItem('contagemVotos', JSON.stringify(votos));
+                alert('Voto registrado!');
+            } else alert('Selecione um sistema antes de votar.');
+        }
+
+        function mostrarResultado() {
+            const votos = JSON.parse(localStorage.getItem('contagemVotos'));
+            const total = Object.values(votos).reduce((sum, v) => sum + v, 0);
+            document.getElementById('resultado').innerHTML = '<h2>Resultado:</h2>' +
+                Object.entries(votos).map(([sistema, v]) => {
+                    const percent = total ? ((v / total) * 100).toFixed(2) : 0;
+                    return `<p>${sistema}: ${v} votos (${percent}%)</p>`;
+                }).join('');
+        }
+
+        function excluirTodosVotos() {
+            localStorage.setItem('contagemVotos', JSON.stringify(initVotos));
+            alert('Votos excluídos!');
+            mostrarResultado();
+        }
+    </script>
+</body>
+</html>
